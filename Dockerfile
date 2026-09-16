@@ -10,12 +10,12 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=optional
+# Keep optional deps (rollup native binary) — omit breaks Vite on linux/x64.
+RUN npm ci
 
 COPY . .
 
-ENV NODE_ENV=development \
-    HOST=0.0.0.0 \
+ENV HOST=0.0.0.0 \
     PORT=4173
 
 EXPOSE 4173
